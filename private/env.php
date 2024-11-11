@@ -11,4 +11,6 @@
     define('AUD', 'http://localhost/elogbook/');
     define('TITLE', 'eLogbook');
     define('FAV_ICO', 'assets/img/favicon.ico');
+    define('LOGO', 'assets/img/logo.svg');
+    define('BANNER', 'assets/img/banner.png');
     
