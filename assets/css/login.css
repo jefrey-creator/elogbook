@@ -1,0 +1,19 @@
+.banner{
+    height: 260px;
+    width: 100%;
+}
+.login_form{
+    padding-top: 7%;
+}
+
+#password_show:hover{
+    cursor: pointer;
+}
+
+
+.login_img:hover{
+    /* opacity: 0.8; */
+    transition: transform 0.3s ease-out; 
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+}

@@ -41,3 +41,7 @@ const defaultTheme = () =>{
         return false;
     }
 }
+
+const logOut = () =>{
+    $('#logOutModal').modal('show');
+}
