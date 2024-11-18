@@ -11,18 +11,21 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="./assets/css/index.css">
+    <link rel="stylesheet" href="./assets/css/main.css">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
     <link rel="shortcut icon" href="<?= FAV_ICO; ?>" type="image/x-icon">
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg sticky-top fs-5 shadow p-3 mb-2">
+    <nav class="navbar navbar-expand-lg sticky-top fs-5 shadow p-3 mb-2 text-white">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="index">
+            <a class="navbar-brand fw-bold text-white" href="index">
                 <img src="<?= LOGO; ?>" alt="Logo" width="60" height="60" class="d-inline-block align-text-center"> <?= TITLE; ?>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,11 +37,11 @@
                 </ul>
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="btn btn-dark nav-link" id="btn-dark" type="button">
+                        <a class="btn btn-dark nav-link text-white" id="btn-dark" type="button">
                             <i class="bi bi-moon-stars-fill"></i>
                         </a>
 
-                        <a class="btn btn-light nav-link" id="btn-light" type="button">
+                        <a class="btn btn-light nav-link text-white" id="btn-light" type="button">
                             <i class="bi bi-brightness-high-fill"></i>
                         </a>
                     </li>
@@ -48,9 +51,9 @@
     </nav>
     <div class="container-fluid">
         <div class="row mt-3 pt-3">
-            <div class="col-lg-2 col-sm-12 col-md-12">
+            <div class="col-lg-2 col-sm-12 col-md-12 mb-3">
                 <div class="alert alert-secondary rounded-0"><strong>Step 1.</strong> Choose an option</div>
-                <ul class="nav nav-pills flex-column text-center nav-fill" role="tablist">
+                <ul class="nav nav-underline flex-column text-center nav-fill" role="tablist">
                     <li class="nav-item" role="presentation">
                         <a class="nav-link active rounded-0" href="#" id="consult-tab" data-bs-toggle="tab" data-bs-target="#consult-tab-pane" type="button" role="tab" aria-controls="consult-tab-pane" aria-selected="true">CONSULTATION</a>
                     </li>
@@ -72,7 +75,7 @@
                                     <div class="row">
                                         <div class="col-sm-12 col-lg-12 col-md-12">
                                             <label for="name">Full Name (Required)</label>
-                                            <input type="text" class="form-control form-control-lg mb-3 rounded-0" id="full_name">
+                                            <input type="text" class="form-control form-control-lg mb-3 rounded-0" id="full_name_c">
                                         </div>
                                         <div class="col-sm-12 col-lg-12 col-md-12">
                                             <label for="person_to_consult">Person to Visit (Required)</label>
@@ -82,11 +85,15 @@
                                             <label for="consult_purpose">Purpose (Required)</label>
                                             <textarea type="text" class="form-control form-control-lg mb-3 rounded-0" id="consult_purpose"></textarea>
                                         </div>
+                                        <hr>
+                                        <div class="mb-3">
+                                            <div class="g-recaptcha" data-sitekey="6Lf1e3oqAAAAAPhU6_4MoadTgX-fua76C1AK3P-N" data-callback="enableConsult"></div>
+                                        </div>
                                     </div>
                                     <hr>
                                     <div class="gap-2 float-end mb-3">
-                                        <button class="btn btn-danger rounded-0">Clear</button>
-                                        <button class="btn btn-success rounded-0">Submit</button>
+                                        <button class="btn btn-danger rounded-0 btnClearForm" type="button">Clear</button>
+                                        <button class="btn btn-success rounded-0 consultBtn" type="submit" disabled="disabled">Submit</button>
                                     </div>
                                 </div>
                             </form>
@@ -98,7 +105,7 @@
                             <div class="card-header">
                                 <h4 class="card-title text-uppercase">Visitor's Logbook</h4>
                             </div>
-                            <form method="POST">
+                            <form method="POST" class="visitorForm">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-sm-12 col-lg-12 col-md-12">
@@ -113,11 +120,15 @@
                                             <label for="visit_purpose">Purpose (Required)</label>
                                             <textarea type="text" class="form-control form-control-lg mb-3" id="visit_purpose"></textarea>
                                         </div>
+                                        <hr>
+                                        <div class="mb-3">
+                                            <div class="g-recaptcha" data-sitekey="6Lf1e3oqAAAAAPhU6_4MoadTgX-fua76C1AK3P-N" data-callback="enableVisit"></div>
+                                        </div>
                                     </div>
                                     <hr>
                                     <div class="gap-2 float-end mb-3">
-                                        <button class="btn btn-danger rounded-0">Clear</button>
-                                        <button class="btn btn-success rounded-0">Submit</button>
+                                        <button class="btn btn-danger rounded-0 btnClearForm" type="button">Clear</button>
+                                        <button class="btn btn-success rounded-0 visitBtn" type="submit" disabled="disabled">Submit</button>
                                     </div>
                                 </div>
                             </form>
@@ -129,59 +140,13 @@
                 <div class="alert alert-success rounded-0">
                     <strong>Step 3.</strong> View Logs
                     <small class="float-end">
-                        Legend: <i class="bi bi-chat-dots text-success"></i> - Ongoing |
+                        Legend: <i class="bi bi-check2-circle text-success"></i> - Accepted |
                         <i class="bi bi-hourglass-split text-primary"></i> - Waiting
                     </small>
                 </div>
                 <div class="auto_refresh">
-                    <?php 
-                        for($i = 0; $i < 5; $i++){
-                        ?>
-                        <div class="card mb-3 rounded-0">
-                            <div class="card-header">
-                                <h4 class="fw-900"><i class="bi bi-hourglass-split text-primary"></i> Person to visit</h4> <i class="badge bg-success float-end">visitor</i>
-                                <hr>
-                                <small class="fw-100">
-                                    Date: 11/10/2024 <br />Time In: 8:00 AM <br /> Time Out: 12:00 PM
-                                </small>
-                            </div>
-                            <div class="card-body">
-                                <blockquote class="blockquote mb-0">
-                                    <h5 class="mb-4">
-                                        Name of visitor
-                                    </h5>
-                                    <footer class="blockquote-footer">
-                                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Autem suscipit iste doloremque amet dolor nemo veniam! Provident amet quia assumenda praesentium, quibusdam minus, iste voluptate, porro soluta dolores at facere!
-                                    </footer>
-                                </blockquote>
-                            </div>
-                        </div>
-                        <?php
-                        }
-                    ?>
-                    <div class="card mb-3 rounded-0">
-                        <div class="card-header">
-                            <h4 class="fw-900"><i class="bi bi-chat-dots text-success"></i> Person to visit</h4> <i class="badge bg-primary float-end">consultation</i>
-                            <hr>
-                            <small class="fw-100">
-                                Date: 11/10/2024 <br />Time In: 8:00 AM <br /> Time Out: 12:00 PM
-                            </small>
-                        </div>
-                        <div class="card-body">
-                            <blockquote class="blockquote mb-0">
-                                <h5 class="mb-4">
-                                    Name of visitor
-                                </h5>
-                                <footer class="blockquote-footer">
-                                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Autem suscipit iste doloremque amet dolor nemo veniam! Provident amet quia assumenda praesentium, quibusdam minus, iste voluptate, porro soluta dolores at facere!
-                                </footer>
-                                
-                                <footer class="blockquote-footer">
-                                    Action Taken
-                                </footer>
-                            </blockquote>
-                        </div>
-                    </div>
+                    <div id="req_logs" class="h5"></div>
+                    <img alt="" id="emptyImageResult" class="img-fluid">
                 </div>
             </div>
         </div>
@@ -201,6 +166,9 @@
     <script>
 
         $(document).ready(function(){
+
+            facultyDropdown();
+            fetchData();
            
             $('#goTopBtn').click(function() {
                 $('html, body').animate({ scrollTop: 0 }, 'fast');
@@ -209,7 +177,132 @@
 
             updateDateTime();
             setInterval(updateDateTime, 1000);
-        })
+
+            $('.btnClearForm').on('click', ()=>{
+                clearVisitForm();
+            });
+
+            $('.visitBtn').on('click', ()=>{
+                var full_name = $('#full_name').val()
+                var person_to_visit = $('#person_to_visit').val()
+                var visit_purpose = $('#visit_purpose').val()
+                var recaptcha = $('.g-recaptcha-response').val();
+
+                $.ajax({
+                    url: 'submit-visit',
+                    method: "POST",
+                    data: {
+                        full_name: full_name,
+                        person_to_visit: person_to_visit,
+                        visit_purpose: visit_purpose,
+                        recaptcha: recaptcha
+                    },
+                    dataType: "json",
+                    cache: false,
+                    beforeSend: function(){
+                        $('.visitBtn').html(`
+                            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                            <span role="status">Submitting...</span>
+                        `).prop('disabled', true);
+                    },
+                    success:function(data){
+
+                        if(data.success === false){
+                            Swal.fire({
+                                title: "Error",
+                                text: data.result,
+                                icon: "error"
+                            }).then( ()=> $('.visitBtn').html('Submit').prop('disabled', false) );
+
+                            return false;
+                        }
+
+                        if(data.success === true){
+                            Swal.fire({
+                                title: "Success",
+                                text: data.result,
+                                icon: "success"
+                            }).then( ()=> $('.visitBtn').html('Submit').prop('disabled', false))
+                            .then(()=> fetchData())
+                            .then( () => clearVisitForm());
+
+                            return false;
+                        } 
+                    }
+                })
+            });
+
+            $('.consultBtn').on('click', ()=>{
+                var full_name_c = $('#full_name_c').val()
+                var person_to_consult = $('#person_to_consult').val()
+                var consult_purpose = $('#consult_purpose').val()
+                var recaptcha_c = $('.g-recaptcha-response').val();
+
+                $.ajax({
+                    url: "submit-consult",
+                    method: "POST",
+                    data: {
+                        full_name_c: full_name_c,
+                        person_to_consult: person_to_consult,
+                        consult_purpose: consult_purpose,
+                        recaptcha_c: recaptcha_c,
+                    },
+                    dataType: "json",
+                    cache: false,
+                    beforeSend:function(){
+                        $('.consultBtn').html(`
+                            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                            <span role="status">Submitting...</span>
+                        `).prop('disabled', true);
+                    },
+                    success:function(data){
+
+                        if(data.success === false){
+                            Swal.fire({
+                                title: "Error",
+                                text: data.result,
+                                icon: "error"
+                            }).then( ()=> $('.consultBtn').html('Submit').prop('disabled', false) );
+
+                            return false;
+                        }
+
+                        if(data.success === true){
+                            Swal.fire({
+                                title: "Success",
+                                text: data.result,
+                                icon: "success"
+                            }).then( ()=> $('.consultBtn').html('Submit').prop('disabled', false))
+                            .then(()=> fetchData())
+                            .then( () => clearVisitForm());
+
+                            return false;
+                        }
+
+                    }
+                });
+            })
+        });
+
+        const clearVisitForm = ()=> {
+
+            $('#full_name').val('')
+            $('#person_to_visit').val('')
+            $('#visit_purpose').val('')
+
+            $('#full_name_c').val('')
+            $('#person_to_consult').val('')
+            $('#consult_purpose').val('')
+        }
+
+        function enableVisit(){
+            $('.visitBtn').prop('disabled', false);
+           
+        }
+
+        function enableConsult(){
+            $('.consultBtn').prop('disabled', false);
+        }
 
         function updateDateTime() {
 
@@ -242,13 +335,106 @@
             document.getElementById('clock').textContent = formattedDateTime;
         }
 
-        
+        const facultyDropdown = ()=>{
+            $.ajax({
+                url: "list-faculty",
+                method: "GET",
+                dataType: "JSON",
+                cache: false,
+                success:function(data){
+                    if(data.success === false){
+                        Swal.fire({
+                            title: "Attention",
+                            text: data.result,
+                            icon: "info"
+                        });
 
-        // const fetchData = ()=>{
-        //     console.log('data1');
-        // }
+                        return false;
+                    }
 
-        // setInterval(fetchData, 5000);
+                    if(data.success === true){
+
+                        Array.isArray(data.result) ? 
+                            data.result.map((item) => {
+                                $('#person_to_consult').append(`
+                                    <option value="${item.uuid}">${item.faculty_name}</option>
+                                `)
+                                $('#person_to_visit').append(`
+                                    <option value="${item.uuid}">${item.faculty_name}</option>
+                                `)
+                                
+                            })
+                        : "";
+
+                    }
+                }
+            })
+        }
+
+
+        const fetchData = ()=>{
+            $.ajax({
+                url: "fetch-request",
+                method: "GET",
+                dataType: "json",
+                cache: false,
+                beforeSend:function(){
+                    $('#req_logs').html(`
+                        <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    `);
+                },
+                success:function(data){
+                    // console.log(data);
+
+                    if(data.success === false){
+                        $('#req_logs').html(data.result);
+                        $('#emptyImageResult').attr('src', './assets/img/empty.svg')
+                        return false;
+                    }
+
+                    if(data.success === true){
+                        $('#req_logs').html(``);
+                        Array.isArray(data.result) ? 
+                            data.result.map( (item) => {
+                                var category = (item.req_category == 1) ? "consultation" : "visitor";
+                                var icon = (item.is_accepted == 1) ? '<i class="bi bi-check2-circle text-success"></i>' : '<i class="bi bi-hourglass-top text-primary"></i>';
+                                var badgeColor = (item.req_category == 1) ? 'bg-primary' : 'bg-success';
+                                var timeOut = (item.time_out === null) ? '' : item.time_out;
+
+                                $('#req_logs').append(
+                                    `
+                                    <div class="card mb-3 rounded-0">
+                                        <div class="card-header">
+                                            <blockquote class="blockquote mb-0">
+                                                <h5 class="mb-4">
+                                                    <i class="bi bi-person"></i> ${item.full_name}
+                                                    <i class="badge ${badgeColor} float-end">${category}</i>
+                                                </h5>
+                                                <footer class="blockquote-footer">
+                                                    ${item.purpose}
+                                                </footer>
+                                            </blockquote>
+                                            <hr>
+                                            <small class="text-muted">
+                                                Date: ${item.date_visited} <br />In: ${item.time_in} <br /> Out: ${timeOut}
+                                            </small>
+                                        </div>
+                                        <div class="card-body">
+                                            <h4 class="fw-900"> ${icon} ${item.person_to_visit}</h4>
+                                        </div>
+                                    </div>
+                                    `
+                                );
+                            })
+                        : "";
+                    }
+                }
+            })
+        }
+
+        setInterval(fetchData, 10000);
   </script>
 </body>
 </html>

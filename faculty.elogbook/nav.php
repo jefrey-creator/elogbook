@@ -17,17 +17,23 @@
                         Dashboard
                     </a>
                 </li>
+                
                 <li class="nav-item">
-                    <a href="user-management" class="nav-link <?= ($page == "users") ? 'active' : '' ?> text-white">
-                        <i class="bi bi-people-fill"></i>    
-                        User Management
+                    <a href="change-password" class="nav-link <?= ($page == "password") ? 'active' : '' ?> text-white">
+                        <i class="bi bi-key"></i>
+                        Change Password
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="email-config" class="nav-link <?= ($page == "config") ? 'active' : '' ?> text-white">
-                        <i class="bi bi-sliders"></i>    
-                        Email Configuration
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle fw-bold" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-bar-chart-line-fill"></i>
+                        Availability Status
                     </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Available</a></li>
+                        <li><a class="dropdown-item" href="#">Busy</a></li>
+                        <li><a class="dropdown-item" href="#">Away</a></li>
+                    </ul>
                 </li>
                 <?php 
                     }
