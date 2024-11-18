@@ -95,7 +95,7 @@
                                     foreach($users as $user){
                                     ?>
                                     <tr oncontextmenu="configMenu('<?= $user->uuid ?>')">
-                                        <td><?= ($user->isBlocked == 1) ? '<span class="badge bg-danger">blocked</span>' : '<span class="badge bg-success">ublocked</span>' ?></td>
+                                        <td><?= ($user->isBlocked == 1) ? '<span class="badge bg-danger">blocked</span>' : '<span class="badge bg-success">active</span>' ?></td>
                                         <td><?= $user->faculty_name; ?></td>
                                         <td><?= $user->email; ?></td>
                                         <td><?= ($user->sex == 1) ? "Male" : "Female"; ?></td>
@@ -214,7 +214,9 @@
 
 
            $('#resetPasswordOption').on('click', ()=>{
+            
                 var user_id = $('#user_id').val();
+                
                 Swal.fire({
                     title: "Are you sure?",
                     text: "Continue password reset.",

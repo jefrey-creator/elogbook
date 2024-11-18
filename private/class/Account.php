@@ -76,7 +76,8 @@
         }
 
         public function select_account_by_uuid($uuid){
-            $sql = "SELECT  f.f_name, f.m_name,f.l_name, f.sex
+            $sql = "SELECT  f.f_name, f.m_name,f.l_name, f.sex,
+                            a.email
                         FROM tbl_acct AS a 
                         LEFT JOIN tbl_faculty AS f ON (a.uuid=f.uuid)
                         WHERE a.uuid = :uuid";

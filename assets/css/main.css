@@ -3,7 +3,7 @@
 }
 
 nav{
-  background-color: inherit
+  background-color: var(--bs-primary-text-emphasis)
 }
 
 .active{
