@@ -29,6 +29,23 @@
                         Email Configuration
                     </a>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-bar-chart-line-fill"></i>
+                        Availability Status <span id="status"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item" href="#" onclick="available()">Available</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#" onclick="busy()">Busy</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#" onclick="away()">Away</a>
+                        </li>
+                    </ul>
+                </li>
                 <?php 
                     }
                 ?>
@@ -48,7 +65,7 @@
                     if(isset($_SESSION['token'])){
                     ?>
                     <li class="nav-item">
-                        <a href="javascript::void(0)" class="nav-link btn btn-danger" onclick="logOut()">Log Out</a>
+                        <a href="javascript::void(0)" class="nav-link btn btn-danger text-white" onclick="logOut()">Log Out</a>
                     </li>
                     <?php 
                     }

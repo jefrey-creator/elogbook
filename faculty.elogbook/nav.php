@@ -60,7 +60,7 @@
                     if(isset($_SESSION['token'])){
                     ?>
                     <li class="nav-item">
-                        <a href="javascript::void(0)" class="nav-link btn btn-danger" onclick="logOut()">Log Out</a>
+                        <a href="javascript::void(0)" class="nav-link btn btn-danger text-white" onclick="logOut()">Log Out</a>
                     </li>
                     <?php 
                     }

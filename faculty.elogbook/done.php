@@ -59,8 +59,11 @@
                     <div id="req_logs" class="h5"></div>
                     <img alt="" id="emptyImageResult" class="img-fluid">
                 </div>
+                <button class="btn btn-outline-primary mb-3" type="button" id="loadMore">Load More</button>
             </div>
+            
         </div>
+
     </div>
     <button id="goTopBtn" class="btn btn-primary float-end">
         <i class="bi bi-arrow-up-circle"></i> Go to Top
@@ -76,52 +79,59 @@
     <script>
 
         $(document).ready(function(){
-
-            fetchData()
+            var page = 1;
+            fetchData(page)
 
             $('#goTopBtn').click(function() {
                 $('html, body').animate({ scrollTop: 0 }, 'fast');
                 return false;
             });
+
+            $('#loadMore').on('click', ()=>{
+                page++
+                fetchData(page)
+            });
         })
 
-        const fetchData = ()=>{
+        const fetchData = (page)=>{
 
             $.ajax({
-                url: "fetch-request",
+                url: "fetch-request-done",
                 method: "GET",
                 data:{
                     is_accepted: 1,
-                    is_completed: 1
+                    is_completed: 1,
+                    page: page
                 },
                 dataType: "json",
                 cache: false,
                 beforeSend:function(){
-                    $('#req_logs').html(`
-                        <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
+                    $('#loadMore').html(`
+                        <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                        <span role="status">Loading...</span>
                     `);
                 },
                 success:function(data){
-                    // console.log(data);
 
                     if(data.success === false){
-                        $('#req_logs').html(data.result);
-                        $('#emptyImageResult').attr('src', '../assets/img/empty.svg')
+                        $('#loadMore').html('All data was loaded successfully').prop('disabled', true);
                         return false;
                     }
 
                     if(data.success === true){
-
-                        $('#req_logs').html(``);
-
+                        $('#loadMore').html('Load More').prop('disabled', false);
                         Array.isArray(data.result) ? 
                             data.result.map( (item) => {
                                 var category = (item.req_category == 1) ? "consultation" : "visitor";
                                 var badgeColor = (item.req_category == 1) ? 'bg-primary' : 'bg-success';
                                 var timeOut = (item.time_out === null) ? '' : item.time_out;
                                 var action_taken = (item.action_taken == null) ? 'N/A' : item.action_taken;
+
+                                var visitor = (item.req_category == 1) ? 
+                                `<footer class="blockquote-footer">
+                                    ${action_taken}
+                                </footer>` : ''
+
                                 $('#req_logs').append(
                                     `
                                     <div class="card mb-3 rounded-0">
@@ -137,15 +147,13 @@
                                             </blockquote>
                                             <hr>
                                             <small class="text-muted">
-                                                Date: ${item.date_visited} <br />In: ${item.time_in} <br /> Out: ${timeOut}
+                                                Date: ${item.date_visited} <br />Time In: ${item.time_in} <br />Time Out: ${timeOut}
                                             </small>
                                         </div>
                                         <div class="card-body">
                                             <blockquote class="blockquote mb-0">
                                                 <h4 class="fw-900 mb-4"> <i class="bi bi-check2-all text-success"></i> ${item.person_to_visit}</h4>
-                                                <footer class="blockquote-footer">
-                                                    ${action_taken}
-                                                </footer>
+                                                ${visitor}
                                             </blockquote>
                                         </div>
                                     </div>

@@ -10,6 +10,7 @@
 
     //SETTINGS
     define('API_KEY', 'NS1Qlxw={qBg=WH1J$6QGntDM^&QxOIF');
+    define('ITEM_PER_PAGE', 10);
     define('ISS', 'http://localhost/elogbook/');
     define('AUD', 'http://localhost/elogbook/');
     define('TITLE', 'eLogbook');

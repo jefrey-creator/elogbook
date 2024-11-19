@@ -53,6 +53,56 @@
             }else{
                 return false;
             }
+            
+        }
+
+        public function fetchAdminLogs($status, $completed){
+
+            $sql = "SELECT l.full_name, l.date_visited, l.time_in, l.time_out,  l.purpose, l.logs_id, l.is_completed, l.req_category, l.is_accepted, l.action_taken,
+                    CONCAT(f.f_name, ' ', f.m_name, f.l_name) as person_to_visit, f.uuid
+                FROM tbl_logs AS l 
+                LEFT JOIN tbl_faculty AS f 
+                ON (l.person_to_visit=f.uuid)
+                WHERE l.is_accepted = :is_accepted AND l.is_completed = :completed
+                ORDER BY l.date_visited DESC, l.time_in DESC
+            ";
+
+            $res = $this->db->prepare($sql);
+            $res->bindParam(":is_accepted", $status, PDO::PARAM_INT);
+            $res->bindParam(":completed", $completed, PDO::PARAM_INT);
+            $res->execute();
+
+            if($res->rowCount() > 0){
+                return $res->fetchAll(PDO::FETCH_OBJ);
+            }else{
+                return false;
+            }
+        }
+
+        public function fetchAdminLogsDone($status, $completed, $offset, $limit){
+
+            $sql = "SELECT l.full_name, l.date_visited, l.time_in, l.time_out,  l.purpose, l.logs_id, l.is_completed, l.req_category, l.is_accepted, l.action_taken,
+                    CONCAT(f.f_name, ' ', f.m_name, f.l_name) as person_to_visit, f.uuid
+                FROM tbl_logs AS l 
+                LEFT JOIN tbl_faculty AS f 
+                ON (l.person_to_visit=f.uuid)
+                WHERE l.is_accepted = :is_accepted AND l.is_completed = :completed
+                ORDER BY l.date_visited DESC, l.time_in DESC 
+                LIMIT :offset, :limit
+            ";
+
+            $res = $this->db->prepare($sql);
+            $res->bindParam(":is_accepted", $status, PDO::PARAM_INT);
+            $res->bindParam(":completed", $completed, PDO::PARAM_INT);
+            $res->bindParam(":offset", $offset, PDO::PARAM_INT);
+            $res->bindParam(":limit", $limit, PDO::PARAM_INT);
+            $res->execute();
+
+            if($res->rowCount() > 0){
+                return $res->fetchAll(PDO::FETCH_OBJ);
+            }else{
+                return false;
+            }
 
         }
 
@@ -70,6 +120,33 @@
             $res->bindParam(":uuid", $uuid, PDO::PARAM_STR);
             $res->bindParam(":is_accepted", $status, PDO::PARAM_INT);
             $res->bindParam(":completed", $completed, PDO::PARAM_INT);
+            
+            $res->execute();
+
+            if($res->rowCount() > 0){
+                return $res->fetchAll(PDO::FETCH_OBJ);
+            }else{
+                return false;
+            }
+        }
+
+        public function facultyLogsDone($uuid, $status, $completed, $offset, $limit){
+            $sql = "SELECT l.full_name, l.date_visited, l.time_in, l.time_out,  l.purpose, l.logs_id, l.is_completed, l.req_category, l.is_accepted, l.action_taken,
+                    CONCAT(f.f_name, ' ', f.m_name, f.l_name) as person_to_visit
+                FROM tbl_logs AS l 
+                LEFT JOIN tbl_faculty AS f 
+                ON (l.person_to_visit=f.uuid)
+                WHERE l.person_to_visit = :uuid AND l.is_accepted = :is_accepted AND l.is_completed = :completed
+                ORDER BY l.date_visited DESC, l.time_in DESC
+                LIMIT :offset, :limit
+            ";
+
+            $res = $this->db->prepare($sql);
+            $res->bindParam(":uuid", $uuid, PDO::PARAM_STR);
+            $res->bindParam(":is_accepted", $status, PDO::PARAM_INT);
+            $res->bindParam(":completed", $completed, PDO::PARAM_INT);
+            $res->bindParam(":offset", $offset, PDO::PARAM_INT);
+            $res->bindParam(":limit", $limit, PDO::PARAM_INT);
             
             $res->execute();
 

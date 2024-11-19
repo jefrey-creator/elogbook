@@ -33,10 +33,10 @@
                     <div class="card-body">
                         <ul class="nav nav-underline nav-fill">
                             <li class="nav-item">
-                                <a class="nav-link active" href="dashboard"><i class="bi bi-hourglass-split"></i> Waiting</a>
+                                <a class="nav-link " href="dashboard"><i class="bi bi-hourglass-split"></i> Waiting</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="accepted"><i class="bi bi-check2-circle"></i> Accepted</a>
+                                <a class="nav-link active" href="accepted"><i class="bi bi-check2-circle"></i> Accepted</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="done"><i class="bi bi-check2-all"></i> Done</a>
@@ -66,6 +66,26 @@
             </div>
         </div>
     </div>
+    <!-- action taken modal  -->
+    <div class="modal" id="actionTakenModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content ">
+            <div class="modal-body">
+                <h3 class="modal-title fs-5 text-danger">Confirm to finished consultation</h3>
+                <br>
+                <span class="mb-4">
+                    To continue, please enter the action taken below.
+                </span>
+                <input type="hidden" id="logs_id">
+                <textarea id="action_taken" class="form-control mb-3" rows="3" cols="3"></textarea>
+                <div class="float-end mt-4">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnFinished">Submit & Finished</button>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
     <button id="goTopBtn" class="btn btn-primary float-end">
         <i class="bi bi-arrow-up-circle"></i> Go to Top
     </button>
@@ -85,6 +105,55 @@
                 $('html, body').animate({ scrollTop: 0 }, 'fast');
                 return false;
             });
+
+            $('#btnFinished').on('click', ()=>{
+                var logs_id = $('#logs_id').val();
+                var action_taken = $('#action_taken').val();
+
+                $.ajax({
+                    url: "accept-action-taken",
+                    method:"POST",
+                    data: {
+                        logs_id: logs_id,
+                        action_taken: action_taken
+                    },
+                    dataType: "json",
+                    cache: false,
+                    beforeSend:function(){
+                        $('#btnFinished').html(`
+                            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                            <span role="status">Loading...</span>`).prop('disabled', false);
+                    },
+                    success:function(data){
+
+                        if(data.success === false){
+
+                            Swal.fire({
+                                title: "Error",
+                                text: data.result,
+                                icon: "info"
+                            }).then( ()=> {
+                                $('#btnFinished').html(`Submit & Finished`).prop('disabled', false);
+                            });
+
+                            return false;
+                        }
+
+                        if(data.success === true){
+
+                            Swal.fire({
+                                title: "Success",
+                                text: data.result,
+                                icon: "success"
+                            }).then( ()=> {
+                                location.href = "done"
+                            });
+
+                            return false;
+                        }
+                    }
+                })
+            })
         })
 
         const fetchData = ()=>{
@@ -93,7 +162,7 @@
                 url: "fetch-request",
                 method: "GET",
                 data:{
-                    is_accepted: 2,
+                    is_accepted: 1,
                     is_completed: 0
                 },
                 dataType: "json",
@@ -126,8 +195,8 @@
                                 var badgeColor = (item.req_category == 1) ? 'bg-primary' : 'bg-success';
                                 var timeOut = (item.time_out === null) ? '' : item.time_out;
                                 var actionBtn = (item.req_category == 1) ? 
-                                `<button class="btn btn-primary float-end btnAccept" type="button" onclick="acceptRequest(${item.logs_id})">Accept</button>`
-                                : `<button class="btn btn-success float-end btnAccept" type="button" onclick="acceptRequest(${item.logs_id})">Accept</button>`
+                                `<button class="btn btn-primary float-end btnAccept" type="button" onclick="actionTaken(${item.logs_id})">Done</button>`
+                                : `<button class="btn btn-success float-end btnAccept" type="button" onclick="doneRequest(${item.logs_id})">Done</button>`
 
                                 var showActionBtn = (item.uuid == uuid) ? actionBtn : '';
 
@@ -163,20 +232,20 @@
             })
         }
 
-        const acceptRequest = (logs_id) =>{
+        const doneRequest = (logs_id) =>{
 
             Swal.fire({
                 title: "Are you sure?",
-                text: "Confirm to accept request.",
+                text: "Confirm to finished request.",
                 icon: "question",
                 showCancelButton: true,
                 confirmButtonColor: "green",
                 cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, accept it!"
+                confirmButtonText: "Yes, it's done"
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "accept-request",
+                        url: "done-request",
                         method: "POST",
                         data: {
                             logs_id: logs_id
@@ -184,9 +253,9 @@
                         dataType: "json",
                         cache: false,
                         beforeSend:function(){
-                            $('.btnAccept').html(`
+                            $('.btnDone').html(`
                                 <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-                                <span role="status">Accepting...</span>
+                                <span role="status">Please wait...</span>
                             `).prop('disabled', true);
                         },
                         success:function(data){
@@ -198,7 +267,7 @@
                                     text: data.result,
                                     icon: "info"
                                 }).then( ()=> {
-                                    $('.btnAccept').html(`Accept`).prop('disabled', false);
+                                    $('.btnDone').html(`Done`).prop('disabled', false);
                                 });
 
                                 return false;
@@ -211,7 +280,7 @@
                                     text: data.result,
                                     icon: "success"
                                 }).then( ()=> {
-                                    location.href = "accepted"
+                                    location.href = "done"
                                 });
 
                                 return false;
@@ -225,6 +294,12 @@
         }
 
         setInterval(fetchData, 10000);
+
+        const actionTaken = (logs_id) => {
+            //open a modal
+            $('#actionTakenModal').modal('show');
+            $('#logs_id').val(logs_id);
+        }
 
     </script>
 </body>
