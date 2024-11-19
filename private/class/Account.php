@@ -77,7 +77,7 @@
 
         public function select_account_by_uuid($uuid){
             $sql = "SELECT  f.f_name, f.m_name,f.l_name, f.sex,
-                            a.email
+                            a.email, a.password
                         FROM tbl_acct AS a 
                         LEFT JOIN tbl_faculty AS f ON (a.uuid=f.uuid)
                         WHERE a.uuid = :uuid";
@@ -97,6 +97,31 @@
             $res = $this->db->prepare($sql);
             
             $res->execute($data);
+
+            return true;
+        }
+
+        public function get_status($uuid){
+            $sql = "SELECT availability FROM tbl_faculty WHERE uuid = :uuid";
+            $res = $this->db->prepare($sql);
+            $res->bindParam(":uuid", $uuid, PDO::PARAM_STR);
+            $res->execute();
+
+            if($res->rowCount() > 0 ){
+                return $res->fetch(PDO::FETCH_OBJ);
+            }else{
+                return false;
+            }
+            
+        }
+
+        public function set_status($uuid, $status){
+            
+            $sql = "UPDATE tbl_faculty SET availability = :status WHERE uuid = :uuid";
+            $res = $this->db->prepare($sql);
+            $res->bindParam(":uuid", $uuid, PDO::PARAM_STR);
+            $res->bindParam(":status", $status, PDO::PARAM_INT);
+            $res->execute();
 
             return true;
         }

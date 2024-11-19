@@ -9,7 +9,7 @@
         }
 
         public function faculty_dropdown(){
-            $sql = "SELECT CONCAT(f.f_name, ' ', f.m_name, ' ', f.l_name) as faculty_name, f.uuid FROM 
+            $sql = "SELECT CONCAT(f.f_name, ' ', f.m_name, ' ', f.l_name) as faculty_name, f.uuid, f.availability FROM 
             tbl_faculty AS f
             LEFT JOIN tbl_acct AS a ON (f.uuid = a.uuid)
             ORDER BY f.f_name ASC";
@@ -35,11 +35,13 @@
         }
 
         public function fetchLogs(){
+
             $sql = "SELECT l.full_name, l.date_visited, l.time_in, l.time_out,  l.purpose, l.logs_id, l.is_completed, l.req_category, l.is_accepted,
                     CONCAT(f.f_name, ' ', f.m_name, f.l_name) as person_to_visit
                 FROM tbl_logs AS l 
                 LEFT JOIN tbl_faculty AS f 
                 ON (l.person_to_visit=f.uuid)
+                WHERE l.is_completed = 0
                 ORDER BY l.date_visited DESC, l.time_in DESC
             ";
 
@@ -51,10 +53,11 @@
             }else{
                 return false;
             }
+
         }
 
         public function facultyLogs($uuid, $status, $completed){
-            $sql = "SELECT l.full_name, l.date_visited, l.time_in, l.time_out,  l.purpose, l.logs_id, l.is_completed, l.req_category, l.is_accepted,
+            $sql = "SELECT l.full_name, l.date_visited, l.time_in, l.time_out,  l.purpose, l.logs_id, l.is_completed, l.req_category, l.is_accepted, l.action_taken,
                     CONCAT(f.f_name, ' ', f.m_name, f.l_name) as person_to_visit
                 FROM tbl_logs AS l 
                 LEFT JOIN tbl_faculty AS f 
@@ -78,6 +81,7 @@
         }
 
         public function accept_request($logs_id){
+
             $sql = "UPDATE tbl_logs SET is_accepted = 1 WHERE logs_id = :logs_id";
             $res = $this->db->prepare($sql);
             $res->bindParam(":logs_id", $logs_id, PDO::PARAM_INT);
@@ -91,6 +95,18 @@
             $res = $this->db->prepare($sql);
             $res->bindParam(":logs_id", $logs_id, PDO::PARAM_INT);
             $res->bindParam(":time_out", $time_out, PDO::PARAM_STR);
+            
+            $res->execute();
+
+            return true;
+        }
+
+        public function complete_consultation($logs_id, $time_out, $action_taken){
+            $sql = "UPDATE tbl_logs SET is_completed = 1, time_out = :time_out, action_taken = :action_taken WHERE logs_id = :logs_id";
+            $res = $this->db->prepare($sql);
+            $res->bindParam(":logs_id", $logs_id, PDO::PARAM_INT);
+            $res->bindParam(":time_out", $time_out, PDO::PARAM_STR);
+            $res->bindParam(":action_taken", $action_taken, PDO::PARAM_STR);
             
             $res->execute();
 

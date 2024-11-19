@@ -356,11 +356,32 @@
 
                         Array.isArray(data.result) ? 
                             data.result.map((item) => {
+
+                                var availability = "";
+
+                                if(item.availability == 1) {
+
+                                    availability = "(available)";
+
+                                }else if(item.availability == 2) {
+
+                                    availability = "(busy)";
+
+                                }else if(item.availability == 3) {
+
+                                    availability = "(away)";
+
+                                }else{
+
+                                    availability = "(not set)";
+
+                                }
+
                                 $('#person_to_consult').append(`
-                                    <option value="${item.uuid}">${item.faculty_name}</option>
+                                    <option value="${item.uuid}">${item.faculty_name} ${availability}</option>
                                 `)
                                 $('#person_to_visit').append(`
-                                    <option value="${item.uuid}">${item.faculty_name}</option>
+                                    <option value="${item.uuid}">${item.faculty_name} ${availability}</option>
                                 `)
                                 
                             })
@@ -401,7 +422,7 @@
                                 var category = (item.req_category == 1) ? "consultation" : "visitor";
                                 var icon = (item.is_accepted == 1) ? '<i class="bi bi-check2-circle text-success"></i>' : '<i class="bi bi-hourglass-top text-primary"></i>';
                                 var badgeColor = (item.req_category == 1) ? 'bg-primary' : 'bg-success';
-                                var timeOut = (item.time_out === null) ? '' : item.time_out;
+                                // var timeOut = (item.time_out === null) ? '' : item.time_out;
 
                                 $('#req_logs').append(
                                     `
@@ -418,7 +439,7 @@
                                             </blockquote>
                                             <hr>
                                             <small class="text-muted">
-                                                Date: ${item.date_visited} <br />In: ${item.time_in} <br /> Out: ${timeOut}
+                                                Date: ${item.date_visited} <br />Time In: ${item.time_in}
                                             </small>
                                         </div>
                                         <div class="card-body">

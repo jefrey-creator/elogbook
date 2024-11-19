@@ -1,6 +1,7 @@
 $(document).ready(function(){
     
     defaultTheme();
+    getStatus();
 
     $('#btn-dark').on('click', () => {
         localStorage.setItem('theme', 'dark');
@@ -40,6 +41,150 @@ const defaultTheme = () =>{
         $('#btn-light').css('display', 'none');
         return false;
     }
+}
+
+const available = () => {
+    $.ajax({
+        url: "set-status",
+        method: "POST",
+        data: {
+            availability: 1,
+        },
+        dataType: "json",
+        cache: false,
+    
+        success:function(data){
+            if(data.success === false){
+
+                Swal.fire({
+                    title: "Error",
+                    text: data.result,
+                    icon: "info"
+                })
+                return false;
+            }
+
+            if(data.success === true){
+
+                Swal.fire({
+                    title: "Success",
+                    text: data.result,
+                    icon: "success"
+                }).then( ()=> {
+                    getStatus();
+                });
+
+                return false;
+            }
+        }
+    });
+}
+
+const busy = () => {
+    $.ajax({
+        url: "set-status",
+        method: "POST",
+        data: {
+            availability: 2,
+        },
+        dataType: "json",
+        cache: false,
+        success:function(data){
+            if(data.success === false){
+
+                Swal.fire({
+                    title: "Error",
+                    text: data.result,
+                    icon: "info"
+                })
+                return false;
+            }
+
+            if(data.success === true){
+
+                Swal.fire({
+                    title: "Success",
+                    text: data.result,
+                    icon: "success"
+                }).then( ()=> {
+                    getStatus();
+                });
+
+                return false;
+            }
+        }
+    });
+}
+
+const away = () => {
+    $.ajax({
+        url: "set-status",
+        method: "POST",
+        data: {
+            availability: 3,
+        },
+        dataType: "json",
+        cache: false,
+        
+        success:function(data){
+            if(data.success === false){
+
+                Swal.fire({
+                    title: "Error",
+                    text: data.result,
+                    icon: "info"
+                })
+
+                return false;
+            }
+
+            if(data.success === true){
+
+                Swal.fire({
+                    title: "Success",
+                    text: data.result,
+                    icon: "success"
+                }).then( ()=> {
+                    getStatus();
+                });
+
+                return false;
+            }
+        }
+    });
+}
+
+const getStatus = ()=>{
+    $.ajax({
+        url: "get-status",
+        method: "GET",
+        dataType: "json",
+        success:function(data){
+
+            if(data.success === false){
+                $('#status').html(data.result);
+                return false;
+            }
+
+            if(data.success === true){
+
+                var availability = "";
+
+                if(data.result.availability == 1) {
+                    availability = "(available)";
+                }else if(data.result.availability == 2) {
+                    availability = "(busy)";
+                }else if(data.result.availability == 3) {
+                    availability = "(away)";
+                }else{
+                    availability = "(not set)";
+                }
+
+                $('#status').html(availability);
+                return false;
+            }
+        }
+    })
 }
 
 const logOut = () =>{

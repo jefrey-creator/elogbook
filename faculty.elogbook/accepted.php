@@ -102,6 +102,55 @@
                 $('html, body').animate({ scrollTop: 0 }, 'fast');
                 return false;
             });
+
+            $('#btnFinished').on('click', ()=>{
+                var logs_id = $('#logs_id').val();
+                var action_taken = $('#action_taken').val();
+
+                $.ajax({
+                    url: "accept-action-taken",
+                    method:"POST",
+                    data: {
+                        logs_id: logs_id,
+                        action_taken: action_taken
+                    },
+                    dataType: "json",
+                    cache: false,
+                    beforeSend:function(){
+                        $('#btnFinished').html(`
+                            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                            <span role="status">Loading...</span>`).prop('disabled', false);
+                    },
+                    success:function(data){
+
+                        if(data.success === false){
+
+                            Swal.fire({
+                                title: "Error",
+                                text: data.result,
+                                icon: "info"
+                            }).then( ()=> {
+                                $('#btnFinished').html(`Submit & Finished`).prop('disabled', false);
+                            });
+
+                            return false;
+                        }
+
+                        if(data.success === true){
+
+                            Swal.fire({
+                                title: "Success",
+                                text: data.result,
+                                icon: "success"
+                            }).then( ()=> {
+                                location.href = "done"
+                            });
+
+                            return false;
+                        }
+                    }
+                })
+            })
         })
 
         const fetchData = ()=>{
@@ -161,7 +210,7 @@
                                             </blockquote>
                                             <hr>
                                             <small class="text-muted">
-                                                Date: ${item.date_visited} <br />In: ${item.time_in} <br /> Out: ${timeOut}
+                                                Date: ${item.date_visited} <br />Time In: ${item.time_in}
                                             </small>
                                         </div>
                                         <div class="card-body">
@@ -243,7 +292,6 @@
 
         const actionTaken = (logs_id) => {
             //open a modal
-
             $('#actionTakenModal').modal('show');
             $('#logs_id').val(logs_id);
         }

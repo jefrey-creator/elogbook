@@ -121,7 +121,7 @@
                                 var category = (item.req_category == 1) ? "consultation" : "visitor";
                                 var badgeColor = (item.req_category == 1) ? 'bg-primary' : 'bg-success';
                                 var timeOut = (item.time_out === null) ? '' : item.time_out;
-
+                                var action_taken = (item.action_taken == null) ? 'N/A' : item.action_taken;
                                 $('#req_logs').append(
                                     `
                                     <div class="card mb-3 rounded-0">
@@ -141,7 +141,12 @@
                                             </small>
                                         </div>
                                         <div class="card-body">
-                                            <h4 class="fw-900"> <i class="bi bi-check2-all text-success"></i> ${item.person_to_visit}</h4>
+                                            <blockquote class="blockquote mb-0">
+                                                <h4 class="fw-900 mb-4"> <i class="bi bi-check2-all text-success"></i> ${item.person_to_visit}</h4>
+                                                <footer class="blockquote-footer">
+                                                    ${action_taken}
+                                                </footer>
+                                            </blockquote>
                                         </div>
                                     </div>
                                     `

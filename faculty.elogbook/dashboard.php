@@ -115,6 +115,7 @@
                     if(data.success === true){
 
                         $('#req_logs').html(``);
+                        $('#emptyImageResult').attr('src', '');
 
                         Array.isArray(data.result) ? 
                             data.result.map( (item) => {
@@ -141,7 +142,7 @@
                                             </blockquote>
                                             <hr>
                                             <small class="text-muted">
-                                                Date: ${item.date_visited} <br />In: ${item.time_in} <br /> Out: ${timeOut}
+                                                Date: ${item.date_visited} <br />Time In: ${item.time_in}
                                             </small>
                                         </div>
                                         <div class="card-body">
