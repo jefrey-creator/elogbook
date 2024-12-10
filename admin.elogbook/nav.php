@@ -46,6 +46,24 @@
                         </li>
                     </ul>
                 </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-printer-fill"></i>
+                        Print Logs
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item" href="print-logs?param=all" target="_blank">All</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="print-logs?param=consultation" target="_blank">Consultation</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="print-logs?param=visitor" target="_blank">Visitor</a>
+                        </li>
+                    </ul>
+                </li>
                 <?php 
                     }
                 ?>

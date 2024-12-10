@@ -82,7 +82,7 @@
         public function fetchAdminLogsDone($status, $completed, $offset, $limit){
 
             $sql = "SELECT l.full_name, l.date_visited, l.time_in, l.time_out,  l.purpose, l.logs_id, l.is_completed, l.req_category, l.is_accepted, l.action_taken,
-                    CONCAT(f.f_name, ' ', f.m_name, f.l_name) as person_to_visit, f.uuid
+                    CONCAT(f.f_name, ' ', COALESCE(f.m_name, ''), f.l_name) as person_to_visit, f.uuid
                 FROM tbl_logs AS l 
                 LEFT JOIN tbl_faculty AS f 
                 ON (l.person_to_visit=f.uuid)
@@ -197,5 +197,48 @@
             $res->execute();
 
             return $res->fetch(PDO::FETCH_OBJ);
+        }
+
+        public function print_logs($req_category){
+            $sql = "select l.full_name as Requester, l.date_visited, l.time_in, l.time_out, CONCAT(f.f_name, ' ', COALESCE(f.m_name, ''), f.l_name) as person_to_visit, l.purpose, l.action_taken, l.req_category FROM tbl_logs AS l 
+                LEFT JOIN tbl_faculty as f ON (l.person_to_visit=f.uuid) WHERE l.req_category = :req_category";
+
+            $res = $this->db->prepare($sql);
+            $res->bindParam(":req_category", $req_category, PDO::PARAM_INT);
+            $res->execute();
+
+            if($res->rowCount() > 0){
+                return $res->fetchAll(PDO::FETCH_OBJ);
+            }else{  
+                return false;
+            }
+        }
+
+        public function print_all_logs(){
+            $sql = "select l.full_name as Requester, l.date_visited, l.time_in, l.time_out, CONCAT(f.f_name, ' ', COALESCE(f.m_name, ''), f.l_name) as person_to_visit, l.purpose, l.action_taken, l.req_category FROM tbl_logs AS l 
+                LEFT JOIN tbl_faculty as f ON (l.person_to_visit=f.uuid)";
+
+            $res = $this->db->prepare($sql);
+            $res->execute();
+
+            if($res->rowCount() > 0){
+                return $res->fetchAll(PDO::FETCH_OBJ);
+            }else{  
+                return false;
+            }
+        }
+
+        public function print_faculty_logs($req_category = null, $uuid){
+            $sql = "select l.full_name as Requester, l.date_visited, l.time_in, l.time_out, CONCAT(f.f_name, ' ', COALESCE(f.m_name, ''), f.l_name) as person_to_visit, l.purpose, l.action_taken, l.req_category FROM tbl_logs AS l 
+                LEFT JOIN tbl_faculty as f ON (l.person_to_visit=f.uuid) WHERE l.req_category = :req_category AND f.uuid = :uuid";
+
+            $res = $this->db->prepare($sql);
+            $res->bindParam(":req_category", $req_category, PDO::PARAM_INT);
+            $res->bindParam(":uuid", $uuid, PDO::PARAM_STR);
+            if($res->rowCount() > 0){
+                return $res->fetchAll(PDO::FETCH_OBJ);
+            }else{  
+                return false;
+            }
         }
     }
